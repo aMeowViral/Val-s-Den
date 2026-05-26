@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VaL's Den — Portafolio 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@400;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --magenta: #d4006a;
+    --magenta-dark: #9a004e;
+    --magenta-light: #ff4da6;
+    --magenta-pale: #f8d0e8;
+    --cream: #f5f0e8;
+    --ink: #1a1015;
+    --ink-soft: #2d1f28;
+    --gray-mid: #6b5a64;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Space Mono', monospace; background: var(--ink); color: var(--cream); overflow-x: hidden; cursor: crosshair; }
+  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.4; }
+
+  /* ── NAV ── */
+  nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:0.75rem 2.5rem; background:rgba(26,16,21,0.95); backdrop-filter:blur(12px); border-bottom:2px solid var(--magenta); }
+  .nav-logo { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+  .nav-logo img { width:44px; height:44px; border-radius:50%; border:2px solid var(--magenta); object-fit:cover; }
+  .nav-logo-text { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:var(--magenta-light); letter-spacing:0.05em; }
+  .nav-logo-text span { color:var(--cream); font-size:0.9rem; font-family:'Caveat',cursive; display:block; line-height:1; margin-top:-4px; }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links a { font-family:'Caveat',cursive; font-size:1.1rem; color:var(--cream); text-decoration:none; transition:color 0.2s; position:relative; }
+  .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:2px; background:var(--magenta-light); transition:width 0.3s; }
+  .nav-links a:hover { color:var(--magenta-light); }
+  .nav-links a:hover::after { width:100%; }
+
+  /* ── HERO ── */
+  #hero { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; align-items:center; padding:6rem 4rem 3rem; position:relative; overflow:hidden; }
+  .hero-bg-stripe { position:absolute; top:0; left:0; right:0; height:6px; background:var(--magenta); }
+  .hero-blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.15; pointer-events:none; }
+  .hero-blob-1 { width:500px; height:500px; background:var(--magenta); top:-100px; right:-100px; }
+  .hero-blob-2 { width:300px; height:300px; background:var(--magenta-light); bottom:50px; left:200px; }
+  .hero-left { position:relative; z-index:2; }
+  .hero-year { font-family:'Space Mono',monospace; font-size:0.75rem; color:var(--magenta-light); letter-spacing:0.3em; text-transform:uppercase; margin-bottom:1rem; animation:fadeSlideUp 0.8s ease both; }
+  .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(4rem,8vw,8rem); line-height:0.9; color:var(--white); margin-bottom:0.5rem; animation:fadeSlideUp 0.8s 0.1s ease both; }
+  .hero-title .accent { color:var(--magenta-light); display:block; }
+  .hero-subtitle { font-family:'Caveat',cursive; font-size:1.4rem; color:var(--magenta-pale); margin-bottom:2rem; animation:fadeSlideUp 0.8s 0.2s ease both; }
+  .hero-tags { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:2.5rem; animation:fadeSlideUp 0.8s 0.3s ease both; }
+  .tag { font-family:'Space Mono',monospace; font-size:0.7rem; padding:0.3rem 0.8rem; border:1px solid var(--magenta); border-radius:100px; color:var(--magenta-light); letter-spacing:0.1em; }
+  .hero-cta { display:inline-block; font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:0.1em; padding:0.9rem 2.5rem; background:var(--magenta); color:white; text-decoration:none; border-radius:3px; position:relative; overflow:hidden; transition:transform 0.2s; animation:fadeSlideUp 0.8s 0.4s ease both; }
+  .hero-cta::before { content:''; position:absolute; inset:0; background:var(--magenta-light); transform:translateX(-100%); transition:transform 0.3s ease; }
+  .hero-cta:hover { transform:translateY(-2px); }
+  .hero-cta:hover::before { transform:translateX(0); }
+  .hero-cta span { position:relative; z-index:1; }
+  .hero-right { position:relative; z-index:2; display:flex; justify-content:center; align-items:center; animation:fadeSlideUp 0.8s 0.3s ease both; }
+  .hero-portrait-wrap { position:relative; width:340px; height:420px; }
+  .portrait-frame { width:100%; height:100%; border:3px solid var(--magenta); position:relative; overflow:hidden; background:var(--ink-soft); }
+  .portrait-frame img { width:100%; height:100%; object-fit:cover; display:block; }
+  .portrait-corner { position:absolute; width:20px; height:20px; border-color:var(--magenta-light); border-style:solid; }
+  .portrait-corner.tl { top:-3px; left:-3px; border-width:3px 0 0 3px; }
+  .portrait-corner.tr { top:-3px; right:-3px; border-width:3px 3px 0 0; }
+  .portrait-corner.bl { bottom:-3px; left:-3px; border-width:0 0 3px 3px; }
+  .portrait-corner.br { bottom:-3px; right:-3px; border-width:0 3px 3px 0; }
+  .portrait-label { position:absolute; bottom:-14px; left:50%; transform:translateX(-50%); background:var(--magenta); font-family:'Caveat',cursive; font-size:0.9rem; padding:0.2rem 1rem; white-space:nowrap; color:white; }
+  .portrait-deco { position:absolute; font-family:'Caveat',cursive; color:var(--magenta); font-size:1.2rem; }
+  .portrait-deco.d1 { top:-30px; right:-40px; transform:rotate(15deg); }
+  .portrait-deco.d2 { bottom:-30px; left:-30px; transform:rotate(-10deg); }
+
+  /* ── SECTION COMMON ── */
+  section { padding:6rem 4rem; position:relative; }
+  .section-label { font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:0.4em; color:var(--magenta); text-transform:uppercase; margin-bottom:0.75rem; }
+  .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,5vw,4.5rem); color:var(--white); line-height:1; margin-bottom:1.5rem; }
+  .section-divider { width:60px; height:3px; background:var(--magenta); margin-bottom:3rem; }
+
+  /* ── SOBRE MI ── */
+  #sobre-mi { background:var(--cream); color:var(--ink); position:relative; overflow:hidden; }
+  #sobre-mi::before { content:''; position:absolute; top:0; left:0; width:8px; height:100%; background:var(--magenta); }
+  #sobre-mi .section-title { color:var(--ink); }
+  #sobre-mi .section-label { color:var(--magenta-dark); }
+  #sobre-mi .section-divider { background:var(--magenta-dark); }
+  .sobre-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+  .sobre-text p { font-size:0.85rem; line-height:1.9; color:var(--ink-soft); margin-bottom:1.2rem; }
+  .sobre-text .highlight { font-family:'Caveat',cursive; font-size:1.6rem; color:var(--magenta); font-weight:700; display:block; margin-bottom:1rem; }
+  .habilidades-title { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--ink); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  .habilidades-title::after { content:''; flex:1; height:2px; background:var(--magenta); }
+  .skills-grid { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:2rem; }
+  .skill-pill { font-family:'Caveat',cursive; font-size:1rem; padding:0.35rem 1rem; border:2px solid var(--magenta-dark); border-radius:100px; color:var(--magenta-dark); background:transparent; transition:all 0.2s; cursor:default; }
+  .skill-pill:hover { background:var(--magenta-dark); color:white; }
+  .valores-list { display:flex; flex-direction:column; gap:0.5rem; }
+  .valor-item { display:flex; align-items:center; gap:0.75rem; font-family:'Caveat',cursive; font-size:1.1rem; color:var(--ink-soft); }
+  .valor-item::before { content:'✦'; color:var(--magenta); font-size:0.8rem; }
+
+  /* ── PROYECTOS ── */
+  #proyectos { background:var(--ink); }
+
+  /* ── PROYECTO BLOCK: layout alternado texto + galería ── */
+  .proyecto-block {
+    display:grid;
+    grid-template-columns:1fr 1.6fr;
+    gap:0;
+    border:1px solid #3a2a33;
+    margin-bottom:3rem;
+    transition:border-color 0.3s;
+    overflow:hidden;
+  }
+  .proyecto-block:hover { border-color:var(--magenta); }
+  .proyecto-block.reverse { grid-template-columns:1.6fr 1fr; }
+  .proyecto-block.reverse .block-info { order:2; }
+  .proyecto-block.reverse .block-gallery { order:1; }
+
+  .block-info {
+    background:var(--ink-soft);
+    padding:2.5rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:1rem;
+  }
+  .block-badge { display:inline-block; background:var(--magenta); font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.12em; padding:0.25rem 0.75rem; color:white; text-transform:uppercase; width:fit-content; }
+  .block-category { font-family:'Space Mono',monospace; font-size:0.65rem; color:var(--magenta); letter-spacing:0.2em; text-transform:uppercase; }
+  .block-title { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; color:var(--white); line-height:1.05; }
+  .block-desc { font-size:0.75rem; color:var(--gray-mid); line-height:1.8; }
+  .block-tools { display:flex; flex-wrap:wrap; gap:0.3rem; }
+  .tool-badge { font-family:'Space Mono',monospace; font-size:0.6rem; padding:0.2rem 0.5rem; background:rgba(212,0,106,0.15); border:1px solid rgba(212,0,106,0.3); color:var(--magenta-light); border-radius:2px; }
+
+  /* ── GALERÍA PRINCIPAL: slider grande ── */
+  .block-gallery { position:relative; overflow:hidden; background:#000; }
+  .block-gallery-track { display:flex; height:100%; transition:transform 0.45s cubic-bezier(.4,0,.2,1); }
+  .block-gallery-track img {
+    width:100%; flex-shrink:0;
+    object-fit:cover;
+    min-height:420px;
+    max-height:560px;
+    cursor:zoom-in;
+    transition:transform 0.4s ease;
+  }
+  .block-gallery-track img:hover { transform:scale(1.02); }
+
+  /* navegación slider */
+  .gal-btn {
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:rgba(0,0,0,0.55); border:1px solid rgba(212,0,106,0.5);
+    color:var(--magenta-light); font-size:1.6rem;
+    width:42px; height:42px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; z-index:5; transition:background 0.2s, border-color 0.2s;
+    border-radius:2px;
+  }
+  .gal-btn:hover { background:var(--magenta); border-color:var(--magenta); color:white; }
+  .gal-btn.prev { left:10px; }
+  .gal-btn.next { right:10px; }
+
+  /* miniaturas ── */
+  .gal-thumbs {
+    position:absolute; bottom:0; left:0; right:0;
+    display:flex; gap:4px; padding:6px 8px;
+    background:linear-gradient(transparent, rgba(0,0,0,0.75));
+    overflow-x:auto; scrollbar-width:none;
+  }
+  .gal-thumbs::-webkit-scrollbar { display:none; }
+  .gal-thumb {
+    width:54px; height:38px; flex-shrink:0;
+    object-fit:cover; cursor:pointer;
+    border:2px solid transparent;
+    transition:border-color 0.2s, opacity 0.2s;
+    opacity:0.55;
+    border-radius:1px;
+  }
+  .gal-thumb.active { border-color:var(--magenta-light); opacity:1; }
+
+  /* contador */
+  .gal-counter {
+    position:absolute; top:10px; right:12px;
+    font-family:'Space Mono',monospace; font-size:0.65rem;
+    color:white; background:rgba(0,0,0,0.55);
+    padding:0.15rem 0.5rem; border-radius:2px; letter-spacing:0.1em;
+  }
+
+  /* ── LIGHTBOX ── */
+  #lightbox {
+    display:none; position:fixed; inset:0; z-index:1000;
+    background:rgba(0,0,0,0.94);
+    align-items:center; justify-content:center;
+    flex-direction:column; gap:1rem;
+  }
+  #lightbox.open { display:flex; }
+  #lightbox img {
+    max-width:92vw; max-height:88vh;
+    object-fit:contain;
+    border:1px solid #3a2a33;
+    box-shadow:0 0 60px rgba(212,0,106,0.2);
+  }
+  #lb-close {
+    position:absolute; top:1.2rem; right:1.5rem;
+    font-size:2rem; color:var(--magenta-light); cursor:pointer;
+    background:none; border:none; line-height:1;
+    transition:color 0.2s;
+  }
+  #lb-close:hover { color:white; }
+  #lb-prev, #lb-next {
+    position:absolute; top:50%; transform:translateY(-50%);
+    font-size:2.5rem; color:var(--magenta-light); cursor:pointer;
+    background:none; border:none; line-height:1;
+    transition:color 0.2s; padding:1rem;
+  }
+  #lb-prev:hover, #lb-next:hover { color:white; }
+  #lb-prev { left:1rem; }
+  #lb-next { right:1rem; }
+  #lb-caption {
+    font-family:'Caveat',cursive; font-size:1.1rem;
+    color:rgba(255,255,255,0.6); text-align:center;
+  }
+
+  /* ── LUJURIA: mosaico especial ── */
+  .lujuria-mosaic {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto auto;
+    gap:4px;
+    background:#000;
+    cursor:zoom-in;
+  }
+  .lujuria-mosaic img {
+    width:100%; object-fit:cover;
+    display:block;
+    transition:opacity 0.2s;
+  }
+  .lujuria-mosaic img:hover { opacity:0.85; }
+  .lujuria-mosaic img:nth-child(1) { grid-column:1/2; height:340px; }
+  .lujuria-mosaic img:nth-child(2) { grid-column:2/3; height:340px; }
+  .lujuria-mosaic img:nth-child(3) { height:260px; }
+  .lujuria-mosaic img:nth-child(4) { height:260px; }
+  .lujuria-mosaic img:nth-child(5) { grid-column:1/3; height:260px; object-position:center 30%; }
+
+  /* ── RADIOGRAFÍA: imagen a ancho completo ── */
+  .proyecto-block.full { grid-template-columns:1fr; }
+  .proyecto-block.full .block-info { flex-direction:row; flex-wrap:wrap; align-items:center; gap:2rem; }
+  .proyecto-block.full .block-info-text { flex:1; min-width:260px; display:flex; flex-direction:column; gap:0.75rem; }
+  .radio-img-wrap { position:relative; overflow:hidden; background:#fff; cursor:zoom-in; }
+  .radio-img-wrap img { width:100%; display:block; max-height:480px; object-fit:contain; transition:transform 0.4s; }
+  .radio-img-wrap:hover img { transform:scale(1.03); }
+
+  /* ── VIDEOS ── */
+  #videos { background:var(--ink-soft); }
+  #videos .section-title { color:var(--white); }
+  .videos-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2.5rem; max-width:900px; margin:0 auto; }
+  .video-card { display:flex; flex-direction:column; gap:1rem; }
+  .video-frame { position:relative; width:100%; padding-bottom:177.78%; border:2px solid var(--magenta); overflow:hidden; background:#000; }
+  .video-frame iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+  .video-label { font-family:'Caveat',cursive; font-size:1.1rem; color:var(--magenta-light); text-align:center; }
+  .video-sublabel { font-family:'Space Mono',monospace; font-size:0.65rem; color:var(--gray-mid); text-align:center; margin-top:-0.5rem; letter-spacing:0.1em; text-transform:uppercase; }
+
+  /* ── CONTACTO ── */
+  #contacto { background:var(--magenta-dark); text-align:center; position:relative; overflow:hidden; }
+  #contacto::before { content:'HABLEMOS'; position:absolute; font-family:'Bebas Neue',sans-serif; font-size:20vw; color:rgba(255,255,255,0.04); top:50%; left:50%; transform:translate(-50%,-50%); white-space:nowrap; pointer-events:none; }
+  .contacto-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,6vw,6rem); color:white; line-height:1; margin-bottom:1rem; position:relative; }
+  .contacto-sub { font-family:'Caveat',cursive; font-size:1.3rem; color:rgba(255,255,255,0.75); margin-bottom:3rem; max-width:500px; margin-left:auto; margin-right:auto; position:relative; }
+  .social-links { display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; position:relative; }
+  .social-link { display:flex; align-items:center; gap:0.6rem; font-family:'Space Mono',monospace; font-size:0.8rem; color:white; text-decoration:none; padding:0.75rem 1.5rem; border:2px solid rgba(255,255,255,0.4); border-radius:3px; transition:all 0.2s; background:rgba(255,255,255,0.05); }
+  .social-link:hover { background:rgba(255,255,255,0.15); border-color:white; transform:translateY(-3px); }
+  .social-link svg { width:18px; height:18px; }
+
+  /* ── FOOTER ── */
+  footer { background:var(--ink); text-align:center; padding:2rem; border-top:1px solid #2d1f28; }
+  footer p { font-size:0.65rem; color:var(--gray-mid); letter-spacing:0.1em; }
+  footer span { color:var(--magenta); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width:900px) {
+    #hero { grid-template-columns:1fr; padding:7rem 2rem 3rem; text-align:center; }
+    .hero-right { margin-top:3rem; }
+    .hero-tags { justify-content:center; }
+    .sobre-grid { grid-template-columns:1fr; gap:2rem; }
+    section { padding:4rem 2rem; }
+    nav { padding:1rem 1.5rem; }
+    .nav-links { gap:1rem; }
+    .proyecto-block, .proyecto-block.reverse { grid-template-columns:1fr; }
+    .proyecto-block.reverse .block-info { order:1; }
+    .proyecto-block.reverse .block-gallery { order:2; }
+    .proyecto-block.full .block-info { flex-direction:column; }
+    .block-gallery-track img { min-height:260px; max-height:340px; }
+    .lujuria-mosaic img:nth-child(1),
+    .lujuria-mosaic img:nth-child(2) { height:200px; }
+    .lujuria-mosaic img:nth-child(3),
+    .lujuria-mosaic img:nth-child(4) { height:160px; }
+    .lujuria-mosaic img:nth-child(5) { height:180px; }
+    .videos-grid { grid-template-columns:1fr; max-width:360px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── LIGHTBOX ── -->
+<div id="lightbox">
+  <button id="lb-close" onclick="closeLB()">✕</button>
+  <button id="lb-prev"  onclick="lbNav(-1)">‹</button>
+  <button id="lb-next"  onclick="lbNav(1)">›</button>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-caption"></div>
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <img src="Logo_2.png" alt="VaL's Den Logo">
+    <div class="nav-logo-text">VaL's Den<span>2026</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg-stripe"></div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-left">
+    <p class="hero-year">// Portafolio 2026</p>
+    <h1 class="hero-title">VaL's <span class="accent">Den</span></h1>
+    <p class="hero-subtitle">Ilustradora · Diseñadora Visual · Narradora Gráfica</p>
+    <div class="hero-tags">
+      <span class="tag">Ilustración</span>
+      <span class="tag">StoryTelling</span>
+      <span class="tag">Fotografía</span>
+      <span class="tag">Técnicas Pictóricas</span>
+      <span class="tag">Animación 2D</span>
+    </div>
+    <a href="#proyectos" class="hero-cta"><span>Ver Proyectos →</span></a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-portrait-wrap">
+      <div class="portrait-corner tl"></div><div class="portrait-corner tr"></div>
+      <div class="portrait-corner bl"></div><div class="portrait-corner br"></div>
+      <div class="portrait-frame">
+        <img src="Logo_1_.png" alt="VaL's Den" style="object-fit:contain;background:#1a1015;padding:2rem;">
+      </div>
+      <div class="portrait-deco d1">✦ Val ✦</div>
+      <div class="portrait-deco d2">★ 2026 ★</div>
+      <div class="portrait-label">Ilustradora & Diseñadora</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOBRE MI ── -->
+<section id="sobre-mi">
+  <div class="section-label">// Quién soy</div>
+  <h2 class="section-title">Holis! Soy Val</h2>
+  <div class="section-divider"></div>
+  <div class="sobre-grid">
+    <div class="sobre-text">
+      <span class="highlight">Ilustradora y diseñadora de la comunicación visual</span>
+      <p>con enfoque en narrativa gráfica, creación de personajes y desarrollo de identidad de marca.</p>
+      <p>Me interesa el arte como herramienta de expresión emocional, explorando su potencial en procesos de conexión, autoconocimiento y comunicación.</p>
+      <p>Cuento con experiencia en proyectos de branding, ilustración, fotografía, edición audiovisual y animación 2D. Combino pensamiento estratégico con sensibilidad visual para crear piezas que conecten...</p>
+      <p style="font-family:'Caveat',cursive;font-size:1.4rem;color:var(--magenta);">✦ contigo ✦</p>
+    </div>
+    <div>
+      <div class="habilidades-title">Algunas Habilidades</div>
+      <div class="skills-grid">
+        <span class="skill-pill">Ilustración</span><span class="skill-pill">StoryTelling</span>
+        <span class="skill-pill">Fotografía</span><span class="skill-pill">Técnicas Pictóricas</span>
+        <span class="skill-pill">Animación 2D</span><span class="skill-pill">Maquetación</span>
+        <span class="skill-pill">Arte Conceptual</span><span class="skill-pill">Edición AV</span>
+      </div>
+      <div class="habilidades-title" style="margin-top:1.5rem;">Valores</div>
+      <div class="valores-list">
+        <div class="valor-item">Atención al detalle</div>
+        <div class="valor-item">Perseverante</div>
+        <div class="valor-item">Sensibilidad</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROYECTOS ── -->
+<section id="proyectos">
+  <div class="section-label">// Mis Trabajos</div>
+  <h2 class="section-title">Proyectos</h2>
+  <div class="section-divider"></div>
+
+  <!-- ══ EDGAR ALLAN POE ══ -->
+  <div class="proyecto-block reveal" id="blk-poe">
+    <div class="block-info">
+      <span class="block-badge">Proyecto Académico</span>
+      <div class="block-category">Editorial</div>
+      <div class="block-title">La Colección Infame — Edgar Allan Poe</div>
+      <p class="block-desc">Diseño de tres cubiertas con temática de terror (carátula, contraportada y lomo) para venderse como colección. Palabras clave: suspenso, oscuridad, descenso a la locura, simbolismo.</p>
+      <div class="block-tools">
+        <span class="tool-badge">Photoshop</span><span class="tool-badge">Illustrator</span>
+        <span class="tool-badge">InDesign</span><span class="tool-badge">Ilustración</span>
+        <span class="tool-badge">Maquetación</span><span class="tool-badge">Digital</span>
+      </div>
+    </div>
+    <div class="block-gallery" id="gal-poe">
+      <div class="block-gallery-track" id="trk-poe">
+        <img src="infame-4.png" alt="Colección Infame - Portada principal" onclick="openLB('poe',0)">
+        <img src="infame-5.png" alt="Colección Infame - El Cuervo" onclick="openLB('poe',1)">
+        <img src="infame-2.png" alt="Colección Infame - Mockup 1" onclick="openLB('poe',2)">
+        <img src="infame-3.png" alt="Colección Infame - Mockup 2" onclick="openLB('poe',3)">
+        <img src="infame-1.png" alt="Colección Infame - Elementos" onclick="openLB('poe',4)">
+      </div>
+      <button class="gal-btn prev" onclick="slide('poe',-1)">‹</button>
+      <button class="gal-btn next" onclick="slide('poe',1)">›</button>
+      <div class="gal-counter" id="cnt-poe">1 / 5</div>
+      <div class="gal-thumbs" id="thmb-poe">
+        <img class="gal-thumb active" src="infame-4.png" onclick="goTo('poe',0)">
+        <img class="gal-thumb" src="infame-5.png" onclick="goTo('poe',1)">
+        <img class="gal-thumb" src="infame-2.png" onclick="goTo('poe',2)">
+        <img class="gal-thumb" src="infame-3.png" onclick="goTo('poe',3)">
+        <img class="gal-thumb" src="infame-1.png" onclick="goTo('poe',4)">
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ EL COCO ══ -->
+  <div class="proyecto-block reverse reveal" id="blk-coco">
+    <div class="block-gallery" id="gal-coco">
+      <div class="block-gallery-track" id="trk-coco">
+        <img src="coco-1.png" alt="El Coco - Introducción: luz cálida" onclick="openLB('coco',0)">
+        <img src="coco-2.jpg" alt="El Coco - Nudo: luz neutral" onclick="openLB('coco',1)">
+        <img src="coco-3.jpg" alt="El Coco - Desenlace: luz fría" onclick="openLB('coco',2)">
+      </div>
+      <button class="gal-btn prev" onclick="slide('coco',-1)">‹</button>
+      <button class="gal-btn next" onclick="slide('coco',1)">›</button>
+      <div class="gal-counter" id="cnt-coco">1 / 3</div>
+      <div class="gal-thumbs" id="thmb-coco">
+        <img class="gal-thumb active" src="coco-1.png" onclick="goTo('coco',0)">
+        <img class="gal-thumb" src="coco-2.jpg" onclick="goTo('coco',1)">
+        <img class="gal-thumb" src="coco-3.jpg" onclick="goTo('coco',2)">
+      </div>
+    </div>
+    <div class="block-info">
+      <span class="block-badge">Arte Conceptual</span>
+      <div class="block-category">Ilustración</div>
+      <div class="block-title">El Coco — Stephen King</div>
+      <p class="block-desc">3 concept-arts que narran Introducción (luz cálida, picado), Nudo (luz neutral, cenital) y Desenlace (luz fría, plano medio) de "The Boogeyman". Exploración de composición, perspectiva y atmósfera.</p>
+      <div class="block-tools">
+        <span class="tool-badge">Photoshop</span><span class="tool-badge">Procreate</span>
+        <span class="tool-badge">Ilustración</span><span class="tool-badge">Digital</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LUJURIA & SOBERBIA ══ -->
+  <div class="proyecto-block reveal" id="blk-lujuria">
+    <div class="block-info">
+      <span class="block-badge">Serie Fotográfica</span>
+      <div class="block-category">Fotografía</div>
+      <div class="block-title">Lujuria & Soberbia</div>
+      <p class="block-desc">Serie de 5 piezas basada en pecados capitales. Cita romántica y lujuriosa contigo misma — teatralidad barroca con intimismo romántico, cargada de simbolismo y sensualidad que se va encendiendo como un ritual de seducción hacia uno mismo.</p>
+      <div class="block-tools">
+        <span class="tool-badge">Photoshop</span><span class="tool-badge">Lightroom</span>
+        <span class="tool-badge">Escenografía</span><span class="tool-badge">Dirección de arte</span>
+      </div>
+    </div>
+    <div class="block-gallery" style="overflow:hidden;">
+      <div class="lujuria-mosaic" id="mosaic-lujuria">
+        <img src="lujuria1.png" alt="Lujuria y Soberbia 1" onclick="openLB('lujuria',0)">
+        <img src="lujuria2.png" alt="Lujuria y Soberbia 2" onclick="openLB('lujuria',1)">
+        <img src="lujuria3.png" alt="Lujuria y Soberbia 3" onclick="openLB('lujuria',2)">
+        <img src="lujuria4.png" alt="Lujuria y Soberbia 4" onclick="openLB('lujuria',3)">
+        <img src="lujuria5.png" alt="Lujuria y Soberbia 5" onclick="openLB('lujuria',4)">
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RETRATO EMOCIONES ══ -->
+  <div class="proyecto-block reverse reveal" id="blk-retrato">
+    <div class="block-gallery" id="gal-retrato">
+      <div class="block-gallery-track" id="trk-retrato">
+        <img src="retrato1.png" alt="Retrato Emociones - triptyco proceso" onclick="openLB('retrato',0)">
+        <img src="retrato2.png" alt="Retrato Emociones - making of" onclick="openLB('retrato',1)">
+      </div>
+      <button class="gal-btn prev" onclick="slide('retrato',-1)">‹</button>
+      <button class="gal-btn next" onclick="slide('retrato',1)">›</button>
+      <div class="gal-counter" id="cnt-retrato">1 / 2</div>
+      <div class="gal-thumbs" id="thmb-retrato">
+        <img class="gal-thumb active" src="retrato1.png" onclick="goTo('retrato',0)">
+        <img class="gal-thumb" src="retrato2.png" onclick="goTo('retrato',1)">
+      </div>
+    </div>
+    <div class="block-info">
+      <span class="block-badge">Stop Motion</span>
+      <div class="block-category">Animación</div>
+      <div class="block-title">Retrato — Emociones</div>
+      <p class="block-desc">Animación StopMotion de más de 300 fotogramas. Pintura acrílica sobre lienzo que retrata las emociones como obra artística análoga y exteriorización del sentimiento interior.</p>
+      <div class="block-tools">
+        <span class="tool-badge">Acrílico</span><span class="tool-badge">CapCut</span>
+        <span class="tool-badge">VN</span><span class="tool-badge">Técnica Híbrida</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RADIOGRAFÍA (full width) ══ -->
+  <div class="proyecto-block full reveal" id="blk-radio">
+    <div class="block-info">
+      <div class="block-info-text">
+        <span class="block-badge">Poema Visual</span>
+        <div class="block-category">AudioVisual</div>
+        <div class="block-title">Radiografía</div>
+        <p class="block-desc">Poema visual de ~1 minuto basado en "Desfibrilador" de Gilraen Eärfalas. Animación digital con ilustraciones de corazón y pulmones, biblioteca de audios y experimentación con IA.</p>
+        <div class="block-tools">
+          <span class="tool-badge">CapCut</span><span class="tool-badge">Procreate</span>
+          <span class="tool-badge">Ilustración</span><span class="tool-badge">Edición AV</span>
+          <span class="tool-badge">Digital</span>
+        </div>
+      </div>
+    </div>
+    <div class="radio-img-wrap" onclick="openLB('radio',0)">
+      <img src="radiografia.png" alt="Radiografía - corazón y pulmones">
+    </div>
+  </div>
+
+</section>
+
+<!-- ── VIDEOS ── -->
+<section id="videos">
+  <div class="section-label">// En movimiento</div>
+  <h2 class="section-title">Animaciones</h2>
+  <div class="section-divider"></div>
+  <div class="videos-grid">
+    <div class="video-card reveal">
+      <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/e9FK7FZax_o?rel=0&modestbranding=1"
+          title="Retrato — Emociones"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="video-label">Retrato — Emociones</div>
+      <div class="video-sublabel">Stop Motion · Acrílico · +300 fotogramas</div>
+    </div>
+    <div class="video-card reveal">
+      <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/OQeNPtgN7Cc?rel=0&modestbranding=1"
+          title="Radiografía — Poema Visual"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="video-label">Radiografía — Poema Visual</div>
+      <div class="video-sublabel">Animación Digital · Gilraen Eärfalas</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACTO ── -->
+<section id="contacto">
+  <div class="contacto-title">¿Tienes una idea?</div>
+  <p class="contacto-sub">Si tienes una idea rondando en tu cabeza, un sueño que quiere despertar o una historia que merece ser contada, me encantaría crearla contigo.</p>
+  <div class="social-links">
+    <a href="https://instagram.com/Vals_Den" class="social-link" target="_blank">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      @Vals_Den
+    </a>
+    <a href="mailto:VaLsden@gmail.com" class="social-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+      VaLsden@gmail.com
+    </a>
+    <a href="https://www.behance.net/valen31" class="social-link" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 11.5c.83 0 1.5-.67 1.5-1.5S8.33 8.5 7.5 8.5H5v3h2.5zm.5 1.5H5v3.5h3c.83 0 1.5-.67 1.5-1.5S8.83 13 8 13zm5.5-.5h3.5c0-1-.5-1.5-1.75-1.5S13.5 11.5 13.5 12.5zm1.75-4C17.5 8.5 19 10 19 12.5c0 .34-.03.66-.09.97H13.5c0 1.25.83 1.53 1.75 1.53.7 0 1.25-.35 1.5-.9h2c-.5 1.7-2 2.4-3.5 2.4C13 16.5 11.5 15 11.5 12.5S13 8.5 15.25 8.5zM9 7H15.5v1H9V7z"/></svg>
+      VaL's Den
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 <span>VaL's Den</span> — Todos los derechos reservados · Hecho con ♥ y mucha tinta</p>
+</footer>
+
+<script>
+// ── SLIDER STATE ──
+const sliders = {
+  poe:     { total:5, cur:0 },
+  coco:    { total:3, cur:0 },
+  retrato: { total:2, cur:0 },
+};
+
+function slide(id, dir) {
+  const s = sliders[id];
+  s.cur = (s.cur + dir + s.total) % s.total;
+  renderSlider(id);
+}
+
+function goTo(id, idx) {
+  sliders[id].cur = idx;
+  renderSlider(id);
+}
+
+function renderSlider(id) {
+  const s = sliders[id];
+  document.getElementById('trk-' + id).style.transform = `translateX(-${s.cur * 100}%)`;
+  document.getElementById('cnt-' + id).textContent = `${s.cur+1} / ${s.total}`;
+  document.querySelectorAll(`#thmb-${id} .gal-thumb`).forEach((t,i) =>
+    t.classList.toggle('active', i === s.cur));
+}
+
+// ── LIGHTBOX ──
+const lbSets = {
+  poe:     ['infame-4.png','infame-5.png','infame-2.png','infame-3.png','infame-1.png'],
+  coco:    ['coco-1.png','coco-2.jpg','coco-3.jpg'],
+  lujuria: ['lujuria1.png','lujuria2.png','lujuria3.png','lujuria4.png','lujuria5.png'],
+  retrato: ['retrato1.png','retrato2.png'],
+  radio:   ['radiografia.png'],
+};
+const lbCaptions = {
+  poe:     ['Portada principal','El Cuervo — mockup','El Gato Negro — mockup','Libro abierto','Elementos de ilustración'],
+  coco:    ['Introducción · Luz cálida · Picado','Nudo · Luz neutral · Cenital','Desenlace · Luz fría · Plano medio'],
+  lujuria: ['Lujuria & Soberbia I','Lujuria & Soberbia II','Lujuria & Soberbia III','Lujuria & Soberbia IV','Lujuria & Soberbia V'],
+  retrato: ['Proceso — triptyco de fotogramas','Making of — estudio'],
+  radio:   ['Radiografía — corazón y pulmones'],
+};
+let lbSet = [], lbIdx = 0;
+
+function openLB(set, idx) {
+  lbSet = lbSets[set];
+  lbIdx = idx;
+  showLB();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function showLB() {
+  document.getElementById('lb-img').src = lbSet[lbIdx];
+  const setKey = Object.keys(lbSets).find(k => lbSets[k] === lbSet);
+  document.getElementById('lb-caption').textContent =
+    (lbCaptions[setKey] && lbCaptions[setKey][lbIdx]) || '';
+}
+
+function lbNav(dir) {
+  lbIdx = (lbIdx + dir + lbSet.length) % lbSet.length;
+  showLB();
+}
+
+function closeLB() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLB();
+});
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLB();
+  if (e.key === 'ArrowLeft') lbNav(-1);
+  if (e.key === 'ArrowRight') lbNav(1);
+});
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
